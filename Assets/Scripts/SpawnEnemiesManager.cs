@@ -12,33 +12,40 @@ public class SpawnEnemiesManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> _enemyList = new List<GameObject>();
     [SerializeField]
+    private float _countdown=10f;
+    [SerializeField]
     private GameObject[] _zoneSpawnList;
 
     private GameObject _zoneSpawnCurrent;
-    private Camera _camera;
-
+    
+    private float _countdownTime;
     
 
     // Start is called before the first frame update
     void Start()
-    {
-        _camera = Camera.main;
-        float orthographicSize = _camera.orthographicSize + 1;
-        float aspectRatio = _camera.aspect + 1;
-
-        InvokeRepeating("Spawwwwwwwwww", 4f, 2f);
+    {   
+ 
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (GameManager.Instance.gameStates == GameStates.Gameplay)
+        {
+            _countdown -= Time.deltaTime;
+            if (_countdown<=0)
+            {
+                _countdown=10f;
+                StartCoroutine(SpawnEnemiesWave());
+            }
+        }
     }
 
-    private void Spawwwwwwwwww()
+    private IEnumerator SpawnEnemiesWave()
     {
         _zoneSpawnCurrent = GetSpawnZone();
-        SpawnEnemies();
+        _zoneSpawnCurrent.GetComponent<SpawnZone>().SpawnEnemy(_enemy);
+        yield return new WaitForSeconds(.1f);
     }
 
     private GameObject GetSpawnZone()

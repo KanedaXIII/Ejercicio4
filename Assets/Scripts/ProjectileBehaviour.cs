@@ -22,7 +22,7 @@ public class ProjectileBehaviour : MonoBehaviour
         if (gameObjectColl.tag == "Enemy")
         {
             GameManager.Instance.AddScore();
-            Destroy(gameObjectColl.transform.parent.gameObject);
+            gameObjectColl.transform.parent.gameObject.GetComponent<EnemyBehaviour>().Dead();
             Destroy(this.gameObject);
         }
     }
